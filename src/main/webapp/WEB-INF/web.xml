@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+  <display-name>spring_chat</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 스프링 부모 컨테이너 생성 : service, repository(contextConfigLocation ctrl + shit + t ==> contextConfigLocation) -->
+  <!-- contextConfigLocation는 정해진 약속(이름)이기 때문에 변경시 적용이 불가능하다. ==> error -->
+  <!-- 부모 생성은 1개가 최대이다. ==> 부모의 이름이 중복되어서는 안된다. 또한 해당 부모의 이름은 contextConfigLocation이며 고정되는 이름이다. -->
+  <context-param>
+	  	<param-name>contextConfigLocation</param-name>
+	  	<param-value>classpath:kr/or/ddit/config/spring/root-context.xml
+	  				 classpath:kr/or/ddit/config/spring/aop-context.xml
+	  				 classpath:kr/or/ddit/config/spring/datasource-context.xml
+	  				 classpath:kr/or/ddit/config/spring/transaction-context.xml</param-value>
+  </context-param>
+  <listener>
+  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  
+  
+  
+  
+  <!-- 자식 컨테이너 생성 - dispatcherServlet을 통해 생성 : controller(contextConfigLocation ctrl + shit + t ==> dispatcherServlet) -->
+  <!-- org.springframework.web.servlet.DispatcherServlet // DispatcherServlet에서 org.springframework.web.context.ContextLoaderListener의 contextConfigLocation를 읽어올 가능성이 있다고 판단(어디까지나 추측) -->
+  <!-- 눈에 보이지 않는 영역에서 spring framework가 스스로 셋팅한다. 그래서 어디까지나(개발자는) 추측을 해야한다. -->
+  <servlet>
+  	<servlet-name>dispatcherServlet</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<init-param>
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>classpath:kr/or/ddit/config/spring/application-context.xml</param-value>
+  	</init-param>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>dispatcherServlet</servlet-name>
+<!--   	<url-pattern>*.do</url-pattern> -->
+<!--   	<url-pattern>/*</url-pattern> -->
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  
+  
+  <!-- 캐릭터 인코딩 설정 - 스프링 프레임워크 filter -->
+  <filter>
+  	<filter-name>encodingFilter</filter-name>
+  	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  	<init-param>
+  		<param-name>encoding</param-name>
+  		<param-value>utf-8</param-value>
+  	</init-param>
+  </filter>
+  <filter-mapping>
+  	<filter-name>encodingFilter</filter-name>
+  	<url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  
+  
+  
+  
+  
+</web-app>

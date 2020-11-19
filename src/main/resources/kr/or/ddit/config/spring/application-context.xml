@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- kr.or.ddit 패키지 하위의 클래스중 @Controller 어노테이션이 붙은
+		 클래스를 스캔하여 스프링 빈으로 생성 -->
+	<context:component-scan base-package="kr.or.ddit" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+	</context:component-scan>
+	
+	
+	
+<!-- 	<bean id="excelView" class="kr.or.ddit.mvc.view.ExcelDownloadView"></bean> -->
+<!-- 	<bean id="profileImgDownload" class="kr.or.ddit.mvc.download.ProfileImgDownload"></bean> -->
+<!-- 	<bean id="profileImgView" class="kr.or.ddit.mvc.view.ProfileImgView"></bean> -->
+<!-- 	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"></bean> -->
+	
+<!-- 	<bean id="attchFileDownload" class="kr.or.ddit.file.controller.FileDownloadViewResolver"></bean> -->
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="1" />
+	</bean>
+	
+	
+	
+	<!-- tiles view resolver 추가
+		 1. tiles 설정 작업 ==> TilesConfigurer를 통해 설정
+		 2. tils view resolver 등록 -->
+	<bean id="tileConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>classpath:kr/or/ddit/config/tiles/tiles-definition.xml</value>
+			</list>
+		</property>
+	</bean>
+	<bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+		<property name="order" value="0" />
+		<property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"></property>
+	</bean>
+	
+	
+	
+	
+	<!-- ViewResolver역할을 수행하는 bean 객체 -->
+	<!-- controller로 부터 return받은 String 문자열의 앞부분(prefix)과 뒷부분(suffix)에 
+			 문자열을 추가하여 해당 경로의 파일(view ==> 여기서는 jsp)을 실행하는 bean 객체 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- prefix : 접두어, sufffix : 접미어
+			 Controller가 리턴하는 문자열에 prefix, suffix를 적용하여 해당 경로의 파일로 응답을 생성
+			 LoginController.getView() ==> "login/view"
+			 
+			 		prefix	   + 	viewName  + suffix
+			 "/WEB-INF/views/" + "login/view" + ".jsp"
+			  -->
+		<property name="order" value="2" />
+		<property name="prefix" value="/WEB-INF/pages/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+
+
+	<websocket:handlers allowed-origins="*" >
+        <websocket:mapping handler="handlerChat" path="/socketChat" />
+        <websocket:sockjs websocket-enabled="true" />
+    </websocket:handlers>
+    
+    <bean id="handlerChat" class="kr.or.ddit.socket.web.ChatHandler" />
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 파일 업로드 처리를 위한 multipartResolver 설정 -->
+	<!-- multipartResolver는 정해진 약속(이름)이다. 변경 불가능 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- @Contoller, @RequestMapping,
+		 HandlerMapping, HandlerAdapter,
+		 formatting conversion service등 
+		 spring mvc 패턴에 필요한 어노테이션, 엘리먼트 치리 -->
+	<mvc:annotation-driven />
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- spring container가 처리하지 못하는 요청에 대해 
+		 server에 등록된 default servlet에게 위임 -->
+	<mvc:default-servlet-handler/>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 정적자원 매핑 처리
+		 1. url 단축을 목적
+		 2. WEB-INF : 외부에서 접근불가능한 공간에 저장된 자원들 접근 매핑 -->
+	<!-- mapping ==> localhost/resources/style.css -->
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/pages/error/"></mvc:resources>
+	
+
+	
+	
+	
+	
+	
+	
+	
+	<!-- localeResolver -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+	
+	<!-- locale 변경 감지 interceptor -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+				<property name="paramName" value="lang" />
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	
+	
+	
+</beans>
