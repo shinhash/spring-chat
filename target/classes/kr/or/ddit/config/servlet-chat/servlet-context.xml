@@ -44,10 +44,12 @@
 	<!-- web socket comunication -->
 	<websocket:handlers allowed-origins="*" >
         <websocket:mapping handler="handlerChat" path="/socketChat" />
+        <websocket:handshake-interceptors>
+       		<bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+        </websocket:handshake-interceptors>
         <websocket:sockjs websocket-enabled="true" />
     </websocket:handlers>
     
-    <bean id="handlerChat" class="kr.or.ddit.socket.web.ChatHandler" />
     
     
     
