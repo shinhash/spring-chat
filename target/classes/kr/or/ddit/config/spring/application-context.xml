@@ -68,16 +68,14 @@
 
 
 	<websocket:handlers allowed-origins="*" >
-        <websocket:mapping handler="handlerChat" path="/socketChat" />
+        <websocket:mapping handler="HandlerChat" path="/socketChat"/>
+        <websocket:handshake-interceptors>
+       		<bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+        </websocket:handshake-interceptors>
         <websocket:sockjs websocket-enabled="true" />
     </websocket:handlers>
     
-    <bean id="handlerChat" class="kr.or.ddit.socket.web.ChatHandler" />
-	
-	
-	
-	
-	
+    <bean id="HandlerChat" class="kr.or.ddit.socket.web.ChatHandler" />
 	
 	
 	

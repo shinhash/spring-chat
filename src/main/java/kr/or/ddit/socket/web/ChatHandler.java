@@ -1,23 +1,19 @@
 package kr.or.ddit.socket.web;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+//@ServerEndpoint(value = "/socketChat.do", configurator = ChattingController.class)
 @Component
 public class ChatHandler extends TextWebSocketHandler {
 
@@ -45,6 +41,8 @@ public class ChatHandler extends TextWebSocketHandler {
 		logger.debug("");
 		logger.debug("");
 		
+		// session 정보 탈취 성공
+		logger.debug("session 정보 : {}", session.getAttributes());
 		
 		
 		userMap.put("userid", webUserid);

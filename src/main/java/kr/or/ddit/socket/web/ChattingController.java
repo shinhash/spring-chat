@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketMessage;
-import org.springframework.web.socket.WebSocketSession;
+
 
 
 @Controller
@@ -21,12 +19,17 @@ public class ChattingController {
 	
 	// 채팅방 입장
 	@RequestMapping(value = "/socketChat.do", method = RequestMethod.GET)
-	public String view_chat(HttpSession session, String userid) throws Exception {
+	public String view_chat(HttpSession session, String userid, String roomid) throws Exception {
 
 		logger.debug("일단 옴");
 		
 		ChatHandler.webUserid = userid;
+		
+		// session 셋팅
 		session.setAttribute("userid", userid);
+		session.setAttribute("roomid", roomid);
+		
+		
 		return "chat/view_chat";
 	}
 }

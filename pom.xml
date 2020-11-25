@@ -331,7 +331,6 @@
 	   <artifactId>spring-websocket</artifactId>
 	   <version>${spring.version}</version>
     </dependency>
-    
         
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 	<dependency>
