@@ -67,6 +67,7 @@
 
 
 
+	<!-- 채팅용 websocketSession handler -->
 	<websocket:handlers allowed-origins="*" >
         <websocket:mapping handler="HandlerChat" path="/socketChat"/>
         <websocket:handshake-interceptors>
@@ -77,6 +78,20 @@
     
     <bean id="HandlerChat" class="kr.or.ddit.socket.web.ChatHandler" />
 	
+	
+	
+	
+	
+	<!-- 알람용 websocketSession handler -->
+	<websocket:handlers allowed-origins="*" >
+        <websocket:mapping handler="alamnSocketHandler" path="/alamnSocket"/>
+        <websocket:handshake-interceptors>
+       		<bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+        <websocket:sockjs websocket-enabled="true" />
+    </websocket:handlers>
+    
+    <bean id="alamnSocketHandler" class="kr.or.ddit.websocket.alamn.AlamnEchoHandler" />
 	
 	
 	
