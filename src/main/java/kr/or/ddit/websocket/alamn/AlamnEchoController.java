@@ -1,5 +1,6 @@
 package kr.or.ddit.websocket.alamn;
 
-public class AlamnEcho {
+public class AlamnEchoController {
 
+	
 }
