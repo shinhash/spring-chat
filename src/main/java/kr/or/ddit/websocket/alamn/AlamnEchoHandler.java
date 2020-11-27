@@ -33,17 +33,28 @@ public class AlamnEchoHandler extends TextWebSocketHandler{
 		
 		logger.debug("접속유저 : {}", userid);
 		userSessionsMap.put(userid, session);
+		
+		for(int i = 0; i < sessions.size(); i++) {
+			logger.debug("sessions : {}", sessions.get(i));
+//			WebSocketSession s = (WebSocketSession) sessions.get(i);
+//			s.sendMessage(new TextMessage(userid + " 님이 입장했습니다."));
+		}
+		
+		
 	}
 	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String msg = message.getPayload();
 		
+		logger.debug("좋아요 버튼 클릭함!");
+		logger.debug("msg : {}", msg);
+		
+		
 		
 		if(StringUtils.isEmpty(msg)) {
 		}else {
 			String[] msgStr = msg.split(",");
-			
 			
 			if(msgStr != null && msgStr.length == 5) {
 				String cmd = msgStr[0];
@@ -52,18 +63,19 @@ public class AlamnEchoHandler extends TextWebSocketHandler{
 				String receiverUserid = msgStr[3];
 				String seq = msgStr[4];
 				
+				logger.debug("cmd : {}", cmd);
+				logger.debug("caller : {}", caller);
+				logger.debug("receiver : {}", receiver);
+				logger.debug("receiverUserid : {}", receiverUserid);
+				logger.debug("seq", seq);
+				
 				WebSocketSession boardWriterSession = userSessionsMap.get(receiverUserid);
 				if("follow".equals(cmd) && boardWriterSession != null) {
 					TextMessage tmpMsg = new TextMessage(caller + " 님이 " + receiver + " 님을 팔로우함");
-					boardWriterSession.sendMessage(message);
-					
+					boardWriterSession.sendMessage(tmpMsg);
 				}
-				
 			}
 		}
-		
-		
-		
 		
 	}
 	

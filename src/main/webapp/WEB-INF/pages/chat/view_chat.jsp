@@ -32,6 +32,7 @@
 			_initSocket: function() {
 				this._socket = new SockJS(this._url);
 				this._socket.onmessage = function(evt) {
+					console.log(evt);
 					webSocket.receiveMessage(evt.data);
 				};
 				this._socket.onclose = function(evt) {
